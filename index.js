@@ -5,14 +5,30 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
-/* --------------------------- SIGN-UP --------------------------- */
+/* ---------------------- SIGN-UP COM BÔNUS ----------------------- */
+
+function isImage(url) {
+    return /\.(jpg|jpeg|png|webp|avif|gif|svg)/.test(url);
+}
+
+function checkLogin(login) {
+    return login.username.length !== 0 && isImage(login.avatar);
+}
 
 let logins = [];
 
 app.post('/sign-up', (req, res) => {
     const login = req.body;
-    logins.push(login);
-    res.send("OK");
+    if (checkLogin(login)) {
+        logins.push(login);
+        res.status(201).send("OK");
+    } else {
+        res.status(400).send("Todos os campos são obrigatórios!")
+    }
+});
+
+app.get('/testLogins', (req, res) => {
+    res.send(logins);
 });
 
 /* ------------------------- TWEETS (POST) ------------------------ */
@@ -37,8 +53,8 @@ app.post('/tweets', (req, res) => {
 
 function tweetsLast10(tweets) {
     let response = [];
-    for(let i = tweets.length - 1; i >= 0; i--) {
-        if(i >= tweets.length - 10) {
+    for (let i = tweets.length - 1; i >= 0; i--) {
+        if (i >= tweets.length - 10) {
             response.push(tweets[i]);
         }
     }

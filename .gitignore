@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /tweteroo
+/tweteroo-bonus
 /.pnp
 .pnp.js
 
