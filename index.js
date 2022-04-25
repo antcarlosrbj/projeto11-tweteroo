@@ -69,6 +69,17 @@ app.get('/tweets', (req, res) => {
     res.send(tweetsLast10(tweets));
 });
 
+/* ---------------------- TWEETS (USERNAME) ----------------------- */
+
+function tweetsUsername(username) {
+    return tweets.filter(tweet => tweet.username === username);
+}
+
+app.get('/tweets/:requestedUsername', (req, res) => {
+    const {requestedUsername} = req.params;
+    res.send(tweetsUsername(requestedUsername));
+});
+
 /* ---------------------------------------------------------------- */
 
 app.listen(5000);
