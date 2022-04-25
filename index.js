@@ -60,18 +60,30 @@ app.post('/tweets', (req, res) => {
 
 /* ------------------------- TWEETS (GET) ------------------------- */
 
-function tweetsLast10(tweets) {
-    let response = [];
-    for (let i = tweets.length - 1; i >= 0; i--) {
-        if (i >= tweets.length - 10) {
-            response.push(tweets[i]);
+function tweetsLast10(tweets, page) {
+
+    if (page > 0 && (page <= Math.ceil(tweets.length / 10) || tweets.length == 0)) {
+        let response = [];
+        for (let i = tweets.length - (1+(page-1)*10); i >= tweets.length - (page * 10); i--) {
+            if (i >= 0) {
+                response.push(tweets[i]);
+            }
         }
+        return response;
+    } else {
+        return "BAD REQUEST";
     }
-    return response;
+
 }
 
 app.get('/tweets', (req, res) => {
-    res.send(tweetsLast10(tweets));
+    const { page } = req.query;
+    
+    if (tweetsLast10(tweets, page) === "BAD REQUEST") {
+        res.status(400).send("Informe uma página válida!");
+    } else {
+        res.send(tweetsLast10(tweets, page));
+    }
 });
 
 /* ---------------------- TWEETS (USERNAME) ----------------------- */
@@ -81,7 +93,7 @@ function tweetsUsername(username) {
 }
 
 app.get('/tweets/:requestedUsername', (req, res) => {
-    const {requestedUsername} = req.params;
+    const { requestedUsername } = req.params;
     res.send(tweetsUsername(requestedUsername));
 });
 
