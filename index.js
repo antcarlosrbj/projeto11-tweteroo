@@ -23,15 +23,15 @@ app.post('/sign-up', (req, res) => {
         logins.push(login);
         res.status(201).send("OK");
     } else {
-        res.status(400).send("Todos os campos são obrigatórios!")
+        res.status(400).send("Todos os campos são obrigatórios!");
     }
 });
 
-app.get('/testLogins', (req, res) => {
-    res.send(logins);
-});
-
 /* ------------------------- TWEETS (POST) ------------------------ */
+
+function checkTweet(tweet) {
+    return tweet.username.length !== 0 && tweet.tweet.length !== 0;
+}
 
 let tweets = [];
 
@@ -45,8 +45,12 @@ function tweetComplete(tweet) {
 
 app.post('/tweets', (req, res) => {
     const tweet = req.body;
-    tweets.push(tweetComplete(tweet));
-    res.send("OK");
+    if (checkTweet(tweet)) {
+        tweets.push(tweetComplete(tweet));
+        res.status(201).send("OK");
+    } else {
+        res.status(400).send("Todos os campos são obrigatórios!");
+    }
 });
 
 /* ------------------------- TWEETS (GET) ------------------------- */
