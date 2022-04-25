@@ -35,6 +35,20 @@ app.post('/tweets', (req, res) => {
 
 /* ------------------------- TWEETS (GET) ------------------------- */
 
+function tweetsLast10(tweets) {
+    let response = [];
+    for(let i = tweets.length - 1; i >= 0; i--) {
+        if(i >= tweets.length - 10) {
+            response.push(tweets[i]);
+        }
+    }
+    return response;
+}
+
+app.get('/tweets', (req, res) => {
+    res.send(tweetsLast10(tweets));
+});
+
 /* ---------------------------------------------------------------- */
 
 app.listen(5000);
