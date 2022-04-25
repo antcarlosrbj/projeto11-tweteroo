@@ -44,7 +44,12 @@ function tweetComplete(tweet) {
 }
 
 app.post('/tweets', (req, res) => {
-    const tweet = req.body;
+
+    const tweet = {
+        username: req.headers.user,
+        tweet: req.body.tweet
+    };
+
     if (checkTweet(tweet)) {
         tweets.push(tweetComplete(tweet));
         res.status(201).send("OK");
